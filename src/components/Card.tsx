@@ -1,13 +1,13 @@
 const Card = (props: any) => {
-  const { pokemon } = props;
+  const { pokemonData } = props;
 
   return (
     <>
-      {pokemon?.map((p: any) => {
+      {pokemonData?.map((p: any) => {
         return (
           <div
             key={p?.id}
-            className="flex flex-col items-center justify-center gap-2 rounded-xl bg-red-200 p-2 shadow-lg cursor-pointer hover:bg-violet-300"
+            className="flex flex-col items-center justify-center gap-2 rounded-xl bg-red-200 p-2 shadow-lg cursor-pointer hover:bg-violet-300 w-46"
           >
             <img className="" src={p?.sprites?.front_default} alt="" />
             <span className="text-lg font-bold text-gray-900 text-center">
