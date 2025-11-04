@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --normal: #a9a99b;
+  --fire: #ff4421;
+  --water: #3099ff;
+  --electric: #ffca38;
+  --grass: #72d04a;
+  --ice: #66cbff;
+  --fighting: #b65745;
+  --poison: #ab5499;
+  --ground: #ddb65f;
+  --flying: #879aff;
+  --psychic: #ff5697;
+  --bug: #aabb1f;
+  --rock: #bbaa65;
+  --ghost: #6868bb;
+  --dragon: #7968ed;
+  --dark: #755644;
+  --steel: #abaaba;
+  --fairy: #ee99ee;
+}
+
+
+
