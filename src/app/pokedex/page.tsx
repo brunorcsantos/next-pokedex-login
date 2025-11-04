@@ -10,7 +10,7 @@ const blogPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
 
-  console.log(pokemonName)
+  console.log(pokemonName);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,18 +42,30 @@ const blogPage = () => {
   }, [pokemonName, pokemonData]);
 
   return (
-    <div className="sticky flex flex-col items-center justify-center p-6 bg-blue-200 min-h-screen">
+    <div className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen">
       {isLoading ? (
         <div>Carregando...</div>
       ) : (
         <>
-          <div className="flex flex-row gap-2 mb-4">
+          <div className="flex flex-row gap-2 mb-4 items-center h-[50px]">
             <span>Search</span>
-            <input type="text" className="bg-white border" onChange={(e) => {setPokemonName(e.target.value)}}/>
+            <input
+              type="text"
+              className="bg-white border"
+              onChange={(e) => {
+                setPokemonName(e.target.value);
+              }}
+            />
           </div>
-          <div className="grid grid-cols-6 gap-4 max-w-7xl">
-            <Card pokemonData={filteredPokemon} />
-          </div>
+          {filteredPokemon.length > 0 ? (
+            <div className="grid grid-cols-6 gap-4 max-w-7xl">
+              <Card pokemonData={filteredPokemon} />
+            </div>
+          ) : (
+            <div className="text-gray-600 text-center col-span-full mt-8">
+              Nenhum Pokémon encontrado
+            </div>
+          )}
         </>
       )}
     </div>
