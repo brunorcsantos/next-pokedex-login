@@ -80,7 +80,7 @@ const blogPage = () => {
           </div>
           {filteredPokemon.length > 0 ? (
             <Link href={"/"}>
-              <div className="grid grid-cols-6 gap-4 max-w-7xl">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
                 <Card pokemonData={filteredPokemon} />
               </div>
             </Link>
