@@ -5,8 +5,8 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main
-      className="min-h-screen flex flex-col items-center justify-center text-center p-6 pt-0"
-      style={{ backgroundColor: "var(--water)", color: "white" }}
+      className="flex flex-1 flex-col items-center justify-center text-center p-6 pt-0"
+      style={{ backgroundColor: "var(--water-off)", color: "white", minHeight: "calc(100vh - 56px)" }}
     >
       {/* Conteúdo principal */}
       <section className="flex flex-col items-center justify-center gap-2 mt-0">
@@ -33,7 +33,7 @@ export default function HomePage() {
       </section>
 
       {/* Rodapé */}
-      <footer className="absolute bottom-0 py-0 text-sm opacity-70">
+      <footer className="absolute bottom-0 py-2 text-sm opacity-70">
         © {new Date().getFullYear()} Pokédex Next — Feito com ❤️ e Tailwind
       </footer>
     </main>

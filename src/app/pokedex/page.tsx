@@ -63,7 +63,7 @@ const blogPage = () => {
   }, [pokemonName, pokemonData]);
 
   return (
-    <div className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen" style={{backgroundColor: "var(--water)"}}>
+    <div className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen" style={{backgroundColor: "var(--water-off)"}}>
       {isLoading ? (
         <div>Carregando...</div>
       ) : (
