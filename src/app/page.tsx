@@ -1,20 +1,41 @@
 "use client";
 
-const Home = () => {
-  const handleLogout = () => {
-    localStorage.removeItem("Bearer");
-  };
+import Link from "next/link";
 
+export default function HomePage() {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <button
-        className="bg-blue-500 text-white p-6 rounded-lg shadow-lg cursor-pointer"
-        onClick={handleLogout}
-      >
-        Centralizado!
-      </button>
-    </div>
-  );
-};
+    <main
+      className="min-h-screen flex flex-col items-center justify-center text-center p-6 pt-0"
+      style={{ backgroundColor: "var(--water)", color: "white" }}
+    >
+      {/* Conteúdo principal */}
+      <section className="flex flex-col items-center justify-center gap-2 mt-0">
+        <img src="images/slowpoke.png" alt="" className="w-72 object-cover"/>
+        <h2 className="text-2xl font-bold drop-shadow-lg">
+          Bem-vindo à sua Pokédex!
+        </h2>
+        <p className="text-lg max-w-lg opacity-90">
+          Explore o mundo Pokémon e descubra informações detalhadas sobre
+          centenas de criaturas incríveis.
+        </p>
 
-export default Home;
+        <Link
+          href="/pokedex"
+          className="mt-0 px-6 py-3 text-lg font-semibold rounded-full transition-all"
+          style={{
+            backgroundColor: "var(--electric)",
+            color: "black",
+            boxShadow: "0 4px 0 var(--ground)",
+          }}
+        >
+          Acessar Pokédex
+        </Link>
+      </section>
+
+      {/* Rodapé */}
+      <footer className="absolute bottom-0 py-0 text-sm opacity-70">
+        © {new Date().getFullYear()} Pokédex Next — Feito com ❤️ e Tailwind
+      </footer>
+    </main>
+  );
+}
