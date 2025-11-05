@@ -32,4 +32,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Deploy on Vercel
 
 This app was deployed on Vercel. 
-Click [here](https://next-pokedex-login.vercel.app/pokedex) to visit the website.
+Click [here](https://next-pokedex-login.vercel.app/) to visit the website.
