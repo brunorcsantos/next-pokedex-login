@@ -11,39 +11,31 @@ const blogPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
 
-  console.log(pokemonName);
-
   const fetchDetailedPokemon = async (results: any[]) => {
-  const chunkSize = 50;
-  const allDetailed: any[] = [];
+    const chunkSize = 50;
+    const allDetailed: any[] = [];
 
-  for (let i = 0; i < results.length; i += chunkSize) {
-    const chunk = results.slice(i, i + chunkSize);
-    const detailedChunk = await Promise.all(
-      chunk.map(async (p: any) => {
-        const res = await fetch(p.url);
-        return res.json();
-      })
-    );
-    allDetailed.push(...detailedChunk);
-  }
+    for (let i = 0; i < results.length; i += chunkSize) {
+      const chunk = results.slice(i, i + chunkSize);
+      const detailedChunk = await Promise.all(
+        chunk.map(async (p: any) => {
+          const res = await fetch(p.url);
+          return res.json();
+        })
+      );
+      allDetailed.push(...detailedChunk);
+    }
 
-  return allDetailed;
-};
+    return allDetailed;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=1025`);
       const data = await res.json();
 
-      const detailed = await fetchDetailedPokemon(data.results)
+      const detailed = await fetchDetailedPokemon(data.results);
 
-      // const detailed = await Promise.all(
-      //   data.results.map(async (p: any) => {
-      //     const res = await fetch(p.url);
-      //     return res.json();
-      //   })
-      // );
       setPokemonData(detailed);
       setFilteredPokemon(detailed);
       setIsLoading(false);
@@ -61,15 +53,18 @@ const blogPage = () => {
       setFilteredPokemon(filtered);
     }
   }, [pokemonName, pokemonData]);
+  
 
   return (
-    <div className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen" style={{backgroundColor: "var(--water-off)"}}>
+    <div
+      className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen"
+      style={{ backgroundColor: "var(--water-off)" }}
+    >
       {isLoading ? (
         <div>Carregando...</div>
       ) : (
         <>
           <div className="flex flex-row gap-2 mb-4 items-center h-[50px]">
-            <span>Search</span>
             <input
               type="text"
               className="bg-white border"
@@ -77,13 +72,14 @@ const blogPage = () => {
                 setPokemonName(e.target.value);
               }}
             />
+            <span>Search</span>
           </div>
           {filteredPokemon.length > 0 ? (
-            <Link href={"/"}>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
-                <Card pokemonData={filteredPokemon} />
-              </div>
-            </Link>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
+              {filteredPokemon.map((pokemon) => (
+                <Card key={pokemon.id} pokemonData={pokemon} />
+              ))}
+            </div>
           ) : (
             <div className="text-gray-600 text-center col-span-full mt-8">
               Nenhum Pokémon encontrado

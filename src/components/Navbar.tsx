@@ -7,8 +7,8 @@ export default function Navbar() {
     <nav className="flex items-center justify-between bg-red-500 text-white p-4 h-14">
       <Link href={"/"}>
         <img
-          src="images/logo.png"
-          alt=""
+          src="/images/logo.png"
+          alt="Logo"
           className="w-20 h-10 object-contain"
         />
       </Link>

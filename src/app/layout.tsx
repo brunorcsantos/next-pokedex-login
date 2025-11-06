@@ -13,7 +13,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="antialiased screen bg-gray-100">
+      <body className="antialiased screen font-sans">
         {!hideNavbar && <Navbar/>}
         <main>{children}</main>
       </body>
