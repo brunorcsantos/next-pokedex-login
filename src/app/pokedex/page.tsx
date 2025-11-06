@@ -57,7 +57,7 @@ const blogPage = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-start p-6 bg-blue-200 min-h-screen"
+      className="flex flex-col items-center justify-start p-6 min-h-screen"
       style={{ backgroundColor: "var(--water-off)" }}
     >
       {isLoading ? (
