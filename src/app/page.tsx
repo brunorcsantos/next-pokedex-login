@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <main
       className="flex flex-1 flex-col items-center justify-center text-center p-6 pt-0"
-      style={{ backgroundColor: "var(--water-off)", color: "white", minHeight: "calc(100vh - 56px)" }}
+      style={{color: "white", minHeight: "calc(100vh - 56px)" }}
     >
       {/* Conteúdo principal */}
       <section className="flex flex-col items-center justify-center gap-2 mt-0">

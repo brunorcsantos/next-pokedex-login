@@ -13,7 +13,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="antialiased screen font-sans">
+      <body className="antialiased screen font-sans bg-gradient-to-r from-blue-100 to-blue-300" >
         {!hideNavbar && <Navbar/>}
         <main>{children}</main>
       </body>

@@ -1,8 +1,6 @@
 "use client";
 
 import Card from "@/components/Card";
-import Navbar from "@/components/Navbar";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const blogPage = () => {
@@ -10,6 +8,11 @@ const blogPage = () => {
   const [pokemonData, setPokemonData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
+  const [page, setPage] = useState<string>(
+    "https://pokeapi.co/api/v2/pokemon?limit=12"
+  );
+  const [nextPage, setNextPage] = useState<string>("");
+  const [previousPage, setPreviousPage] = useState<string>("");
 
   const fetchDetailedPokemon = async (results: any[]) => {
     const chunkSize = 50;
@@ -29,11 +32,18 @@ const blogPage = () => {
     return allDetailed;
   };
 
+  const handlePage = (url: string) => {
+    setPage(url);
+    console.log(page);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=1025`);
+      const res = await fetch(page);
       const data = await res.json();
-
+      console.log(data);
+      setNextPage(data.next);
+      setPreviousPage(data.previous);
       const detailed = await fetchDetailedPokemon(data.results);
 
       setPokemonData(detailed);
@@ -41,7 +51,7 @@ const blogPage = () => {
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (pokemonName.trim() === "") {
@@ -53,13 +63,9 @@ const blogPage = () => {
       setFilteredPokemon(filtered);
     }
   }, [pokemonName, pokemonData]);
-  
 
   return (
-    <div
-      className="flex flex-col items-center justify-start p-6 min-h-screen"
-      style={{ backgroundColor: "var(--water-off)" }}
-    >
+    <div className="flex flex-col items-center justify-start p-6 min-h-screen">
       {isLoading ? (
         <div>Carregando...</div>
       ) : (
@@ -75,10 +81,37 @@ const blogPage = () => {
             <span>Search</span>
           </div>
           {filteredPokemon.length > 0 ? (
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
-              {filteredPokemon.map((pokemon) => (
-                <Card key={pokemon.id} pokemonData={pokemon} />
-              ))}
+            <div className="flex flex-col items-center">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
+                {filteredPokemon.map((pokemon) => (
+                  <Card key={pokemon.id} pokemonData={pokemon} />
+                ))}
+              </div>
+              <div className="flex gap-4 m-10">
+                <div className="flex flex-row gap-2">
+                  {previousPage ? (
+                    <button
+                      className="cursor-pointer hover:text-sky-700 hover:font-bold m-2"
+                      onClick={() => {
+                        handlePage(previousPage);
+                      }}
+                    >
+                      {"<<"}Previous
+                    </button>
+                  ) : (
+                    ""
+                  )}
+
+                  <button
+                    className="cursor-pointer hover:text-sky-700 hover:font-bold m-2"
+                    onClick={() => {
+                      handlePage(nextPage);
+                    }}
+                  >
+                    Next{">>"}
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="text-gray-600 text-center col-span-full mt-8">
