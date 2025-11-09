@@ -15,6 +15,20 @@ export default function PokemonCard(props: any) {
           key={p.id ?? p.name}
           className="bg-white dark:bg-gray-200 rounded-2xl shadow-md p-4 flex flex-col items-center justify-between transition hover:scale-105 h-auto w-full"
         >
+          <div className="flex gap-2 mt-4">
+            {p.types.map((type: any) => (
+              <span
+                key={type.type.name}
+                className="px-3 py-1 rounded-full font-semibold capitalize"
+                style={{
+                  backgroundColor: `var(--${type.type.name})`,
+                  color: "white",
+                }}
+              >
+                {type.type.name}
+              </span>
+            ))}
+          </div>
           <div className="flex items-center justify-center w-full h-28">
             <img
               src={p.sprites?.front_default}

@@ -136,7 +136,7 @@ const loginPage = () => {
           />
         </div>
         {/* Cards de Pokémon */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-0 w-full min-w-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-2 w-full min-w-0">
           {currentItems.map((pokemon) => (
             <PokemonCard key={pokemon.id} pokemonData={pokemon} />
           ))}

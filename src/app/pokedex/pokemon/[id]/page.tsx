@@ -8,6 +8,7 @@ export default async function PokemonPage({
   const id = params;
 
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${(await id).id}`);
+  
 
   if (!res.ok) {
     return (
@@ -20,7 +21,7 @@ export default async function PokemonPage({
   }
 
   const data = await res.json();
-  
+  console.log()
 
   return (
     <div className="flex flex-col items-center pt-10 justify-start h-full">
@@ -35,6 +36,18 @@ export default async function PokemonPage({
         alt=""
         className="bg-gray-200 w-92 h-96"
       />
+      <div className="flex gap-2 mt-4">
+        {data.types.map((type: any) => (
+          <span
+            key={type.type.name}
+            className="px-3 py-1 rounded-full font-semibold capitalize"
+            style={{ backgroundColor: `var(--${type.type.name})`, color: 'white' }}
+          >
+            {type.type.name}
+          </span>
+        ))}
+      </div>
+      
       <div></div>
     </div>
   );

@@ -6,7 +6,7 @@ const Pagination = (props: any) => {
   
   return (
     <div>
-      <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-white/10 dark:bg-transparent">
+      <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 m-2 rounded-xl sm:px-6 dark:border-white/10 dark:bg-transparent">
         <div className="flex w-full items-center justify-between">
           <p className="text-sm text-gray-700 dark:text-gray-300">
             Mostrando <span className="font-medium">{startIndex + 1}</span> -{" "}
