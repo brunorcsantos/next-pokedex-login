@@ -11,7 +11,7 @@ export default async function PokemonPage({
 
   if (!res.ok) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen" style={{ backgroundColor: "var(--water-off)" }}>
+      <div className="flex flex-col items-center justify-center h-full" style={{ backgroundColor: "var(--water-off)" }}>
         <h1 className="text-2xl font-bold text-red-700">
           Pokémon não encontrado!
         </h1>
@@ -23,8 +23,8 @@ export default async function PokemonPage({
   
 
   return (
-    <div className="flex flex-col items-center pt-10 justify-start min-h-screen" style={{ backgroundColor: "var(--water-off)" }}>
-      <div className=" flex flex-col items-center mb-6">
+    <div className="flex flex-col items-center pt-10 justify-start h-full">
+      <div className="flex flex-col items-center mb-6">
         <div>{data.name.toUpperCase()}</div>
         <div>#{data.id.toString().padStart(4, "0")}</div>
       </div>

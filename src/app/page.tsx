@@ -6,10 +6,10 @@ export default function HomePage() {
   return (
     <main
       className="flex flex-1 flex-col items-center justify-center text-center p-6 pt-0"
-      style={{color: "white", minHeight: "calc(100vh - 56px)" }}
+      style={{color: "white"}}
     >
       {/* Conteúdo principal */}
-      <section className="flex flex-col items-center justify-center gap-2 mt-0">
+      <section className="flex flex-col items-center justify-center gap-2 mt-2">
         <img src="images/slowpoke.png" alt="" className="w-72 object-cover"/>
         <h2 className="text-2xl font-bold drop-shadow-lg">
           Bem-vindo à sua Pokédex!

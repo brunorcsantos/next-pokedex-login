@@ -4,7 +4,8 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between bg-red-500 text-white p-4 h-14">
+    // make navbar sticky so it's always at the top of the viewport
+    <nav className="sticky top-0 z-50 flex items-center justify-between bg-red-500 text-white p-4 h-14">
       <Link href={"/"}>
         <img
           src="/images/logo.png"

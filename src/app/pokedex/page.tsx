@@ -1,18 +1,16 @@
 "use client";
 
-import Card from "@/components/Card";
 import { useEffect, useState } from "react";
+import Fuse from "fuse.js";
+import PokemonCard from "@/components/PokemonCard";
+import Pagination from "@/components/Pagination";
 
-const blogPage = () => {
-  const [pokemonName, setPokemonName] = useState<string>("");
+const loginPage = () => {
+  const itemsPerPage = 18;
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [pokemonData, setPokemonData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
-  const [page, setPage] = useState<string>(
-    "https://pokeapi.co/api/v2/pokemon?limit=12"
-  );
-  const [nextPage, setNextPage] = useState<string>("");
-  const [previousPage, setPreviousPage] = useState<string>("");
+  const [pokemonName, setPokemonName] = useState<string>("");
 
   const fetchDetailedPokemon = async (results: any[]) => {
     const chunkSize = 50;
@@ -32,96 +30,133 @@ const blogPage = () => {
     return allDetailed;
   };
 
-  const handlePage = (url: string) => {
-    setPage(url);
-    console.log(page);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(page);
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
       const data = await res.json();
-      console.log(data);
-      setNextPage(data.next);
-      setPreviousPage(data.previous);
       const detailed = await fetchDetailedPokemon(data.results);
 
       setPokemonData(detailed);
       setFilteredPokemon(detailed);
-      setIsLoading(false);
     };
     fetchData();
-  }, [page]);
+  }, []);
 
   useEffect(() => {
+    if (!pokemonData || pokemonData.length === 0) return;
+
     if (pokemonName.trim() === "") {
       setFilteredPokemon(pokemonData);
-    } else {
-      const filtered = pokemonData.filter((p) =>
-        p.name.toLowerCase().includes(pokemonName.toLowerCase())
-      );
-      setFilteredPokemon(filtered);
+      setCurrentPage(1);
+      return;
     }
+
+    const timer = setTimeout(() => {
+      const fuse = new Fuse(pokemonData, {
+        keys: ["name"], // Campo usado para buscar
+        threshold: 0.4, // 0 = busca exata | 1 = tudo é similar (0.3–0.4 é ideal)
+      });
+
+      const results = fuse.search(pokemonName);
+      setFilteredPokemon(results.map((r) => r.item));
+      setCurrentPage(1);
+    }, 300); // 300ms de atraso
+    return () => clearTimeout(timer);
   }, [pokemonName, pokemonData]);
 
-  return (
-    <div className="flex flex-col items-center justify-start p-6 min-h-screen">
-      {isLoading ? (
-        <div>Carregando...</div>
-      ) : (
-        <>
-          <div className="flex flex-row gap-2 mb-4 items-center h-[50px]">
-            <input
-              type="text"
-              className="bg-white border"
-              onChange={(e) => {
-                setPokemonName(e.target.value);
-              }}
-            />
-            <span>Search</span>
-          </div>
-          {filteredPokemon.length > 0 ? (
-            <div className="flex flex-col items-center">
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl">
-                {filteredPokemon.map((pokemon) => (
-                  <Card key={pokemon.id} pokemonData={pokemon} />
-                ))}
-              </div>
-              <div className="flex gap-4 m-10">
-                <div className="flex flex-row gap-2">
-                  {previousPage ? (
-                    <button
-                      className="cursor-pointer hover:text-sky-700 hover:font-bold m-2"
-                      onClick={() => {
-                        handlePage(previousPage);
-                      }}
-                    >
-                      {"<<"}Previous
-                    </button>
-                  ) : (
-                    ""
-                  )}
+  useEffect(() => {
+    localStorage.setItem("currentPage", String(currentPage));
+  }, [currentPage]);
 
-                  <button
-                    className="cursor-pointer hover:text-sky-700 hover:font-bold m-2"
-                    onClick={() => {
-                      handlePage(nextPage);
-                    }}
-                  >
-                    Next{">>"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="text-gray-600 text-center col-span-full mt-8">
-              Nenhum Pokémon encontrado
-            </div>
-          )}
-        </>
-      )}
+  const totalPages = Math.ceil(filteredPokemon.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredPokemon.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const goToPrevious = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const goToNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  // Função auxiliar para limitar o número de botões visíveis
+  const getVisiblePages = () => {
+    const maxVisible = 5;
+    const pages = [];
+
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages, start + maxVisible - 1);
+
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
+  return (
+    <div className="h-full overflow-auto">
+      <div className="flex flex-col items-center w-full max-w-6xl mx-auto py-4">
+        {/*Input*/}
+        <div className="relative w-full max-w-md mb-8">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg 
+              className="h-5 w-5 text-gray-400" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar Pokémon..."
+            className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 
+                     bg-white/90 backdrop-blur-sm shadow-sm transition-all
+                     focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-300
+                     text-gray-900 placeholder-gray-500"
+            onChange={(e) => {
+              setPokemonName(e.target.value);
+            }}
+          />
+        </div>
+        {/* Cards de Pokémon */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-0 w-full min-w-0">
+          {currentItems.map((pokemon) => (
+            <PokemonCard key={pokemon.id} pokemonData={pokemon} />
+          ))}
+        </div>
+
+        {/* Paginação */}
+        <Pagination
+          startIndex={startIndex}
+          itemsPerPage={itemsPerPage}
+          filteredPokemon={filteredPokemon}
+          goToPrevious={goToPrevious}
+          currentPage={currentPage}
+          getVisiblePages={getVisiblePages}
+          setCurrentPage={setCurrentPage}
+          goToNext={goToNext}
+          totalPages={totalPages}
+        />
+      </div>
     </div>
   );
 };
 
-export default blogPage;
+export default loginPage;

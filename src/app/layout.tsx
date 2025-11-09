@@ -13,9 +13,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="antialiased screen font-sans bg-gradient-to-r from-blue-100 to-blue-300" >
-        {!hideNavbar && <Navbar/>}
-        <main>{children}</main>
+      <body className="antialiased min-h-screen flex flex-col font-sans bg-[#5CAEDB]">
+        {!hideNavbar && <Navbar />}
+        {/* make main exactly viewport minus navbar (navbar = h-14 = 56px) */}
+        <main className="h-[calc(100vh-56px)] overflow-auto">{children}</main>
       </body>
     </html>
   );
