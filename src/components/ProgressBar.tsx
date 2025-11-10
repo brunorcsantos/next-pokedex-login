@@ -1,0 +1,46 @@
+import React from "react";
+
+interface Stat {
+  base_stat: number;
+  stat: { name: string };
+}
+
+interface ProgressBarProps {
+  stats: Stat[];
+}
+
+const ProgressBar = ({ stats }: ProgressBarProps) => {
+  const minStat = (base: number, name: string) => {
+    if (name === "hp") {
+      return Math.floor(((2 * base + 0 + 0) * 100) / 100 + 100 + 10);
+    } else return Math.floor((((2 * base + 0 + 0) * 100) / 100 + 5) * 0.9);
+  };
+
+  const maxStat = (base: number, name: string) => {
+    if (name === "hp") {
+      return Math.floor(((2 * base + 31 + 252 / 4) * 100) / 100 + 100 + 10);
+    } else
+      return Math.floor((((2 * base + 31 + 252 / 4) * 100) / 100 + 5) * 1.1);
+  };
+
+  return (
+    <div className="flex flex-col gap-3 w-full max-w-lg">
+      {stats.map((s) => (
+        <div key={s.stat.name} className="flex items-center gap-2 w-full">
+          <span className="w-32 text-right font-semibold capitalize text-gray-700 whitespace-nowrap">{s.stat.name}</span>
+          <div className="flex-1 h-6 w-56 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-6 rounded-full bg-gray-600"
+              style={{ width: `${Math.min(s.base_stat, 100)}%` }}
+            />
+          </div>
+          <span className="w-12  text-gray-600">{s.base_stat}</span>
+          <span className="w-14  text-gray-500 text-xs">{minStat(s.base_stat, s.stat.name)}</span>
+          <span className="w-14  text-gray-500 text-xs">{maxStat(s.base_stat, s.stat.name)}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ProgressBar;

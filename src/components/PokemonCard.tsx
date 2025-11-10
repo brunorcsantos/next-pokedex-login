@@ -15,6 +15,17 @@ export default function PokemonCard(props: any) {
           key={p.id ?? p.name}
           className="bg-white dark:bg-gray-200 rounded-2xl shadow-md p-4 flex flex-col items-center justify-between transition hover:scale-105 h-auto w-full"
         >
+          <p className="capitalize font-semibold text-black text-center">
+            {p.name}
+          </p>
+          <p className="text-gray-500 text-center">#{p.id}</p>
+          <div className="flex items-center justify-center w-full h-28">
+            <img
+              src={p.sprites?.front_default}
+              alt={p.name}
+              className="w-full h-full object-contain"
+            />
+          </div>
           <div className="flex gap-2 mt-4">
             {p.types.map((type: any) => (
               <span
@@ -29,17 +40,8 @@ export default function PokemonCard(props: any) {
               </span>
             ))}
           </div>
-          <div className="flex items-center justify-center w-full h-28">
-            <img
-              src={p.sprites?.front_default}
-              alt={p.name}
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <p className="capitalize font-semibold text-black text-center">
-            {p.name}
-          </p>
-          <p className="text-gray-500 text-center">#{p.id}</p>
+          
+          
         </div>
       </Link>
     </>
