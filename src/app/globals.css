@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 :root {
   --normal: #a9a99b;
   --fire: #ff4421;
@@ -21,10 +20,13 @@
   --steel: #abaaba;
   --fairy: #ee99ee;
   --water-off: #46a1fc;
-  --font-body: 'Public Sans', sans-serif;
+  --font-body: "Public Sans", sans-serif;
 
-  --background: #866567
+  --background: #866567;
+
+  --fraco: #ff5959;
+  --medio: #f5ac78;
+  --bom: #fae078;
+  --otimo: #9db7f5;
+  --excelente: #a7db8d;
 }
-
-
-

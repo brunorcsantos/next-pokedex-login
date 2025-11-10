@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 
 interface Stat {
@@ -23,20 +25,46 @@ const ProgressBar = ({ stats }: ProgressBarProps) => {
       return Math.floor((((2 * base + 31 + 252 / 4) * 100) / 100 + 5) * 1.1);
   };
 
+  const getStatColor = (value: number) => {
+    if (value <= 50) return "fraco"; // fraco
+    if (value <= 100) return "medio"; // médio
+    if (value <= 150) return "bom"; // bom
+    if (value <= 200) return "otimo"; // ótimo
+    return "excelente"; // excelente
+  };
+
+  const showStats = (baseStat: number) => {
+    const maxBaseStat = 255; // maior valor possível em qualquer stat
+    const normalizedStat = (baseStat / maxBaseStat) * 100;
+    return normalizedStat;
+  };
+
+  console.log(stats)
+
   return (
     <div className="flex flex-col gap-3 w-full max-w-lg">
       {stats.map((s) => (
         <div key={s.stat.name} className="flex items-center gap-2 w-full">
-          <span className="w-32 text-right font-semibold capitalize text-gray-700 whitespace-nowrap">{s.stat.name}</span>
-          <div className="flex-1 h-6 w-56 bg-gray-200 rounded-full overflow-hidden">
+          <span className="w-32 text-right font-semibold capitalize text-gray-700 whitespace-nowrap">
+            {s.stat.name}
+          </span>
+          <div className="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-6 rounded-full bg-gray-600"
-              style={{ width: `${Math.min(s.base_stat, 100)}%` }}
+              className="h-4 rounded-full"
+              style={{
+                width: `${showStats(s.base_stat)}%`,
+                backgroundColor: `var(--${getStatColor(s.base_stat)})`,
+              }}
             />
           </div>
           <span className="w-12  text-gray-600">{s.base_stat}</span>
-          <span className="w-14  text-gray-500 text-xs">{minStat(s.base_stat, s.stat.name)}</span>
-          <span className="w-14  text-gray-500 text-xs">{maxStat(s.base_stat, s.stat.name)}</span>
+          <span className="w-14  text-gray-500 text-xs">
+            {minStat(s.base_stat, s.stat.name)}
+          </span>
+          <span className="w-14  text-gray-500 text-xs">
+            {maxStat(s.base_stat, s.stat.name)}
+          </span>
+            
         </div>
       ))}
     </div>

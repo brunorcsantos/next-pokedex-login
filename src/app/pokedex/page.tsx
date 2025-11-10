@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import Fuse from "fuse.js";
 import PokemonCard from "@/components/PokemonCard";
 import Pagination from "@/components/Pagination";
+import { Loading } from "@/components/Loading";
 
-const loginPage = () => {
+const pokedexPage = () => {
   const itemsPerPage = 18;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pokemonData, setPokemonData] = useState<any[]>([]);
   const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
   const [pokemonName, setPokemonName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchDetailedPokemon = async (results: any[]) => {
     const chunkSize = 50;
@@ -38,6 +40,7 @@ const loginPage = () => {
 
       setPokemonData(detailed);
       setFilteredPokemon(detailed);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
@@ -102,24 +105,27 @@ const loginPage = () => {
 
     return pages;
   };
-
-  return (
+  return isLoading ? (
+    <div>
+      <Loading />
+    </div>
+  ) : (
     <div className="h-full overflow-auto">
       <div className="flex flex-col items-center w-full max-w-6xl mx-auto py-4">
         {/*Input*/}
         <div className="relative w-full max-w-md mb-8">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg 
-              className="h-5 w-5 text-gray-400" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className="h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
           </div>
@@ -159,4 +165,4 @@ const loginPage = () => {
   );
 };
 
-export default loginPage;
+export default pokedexPage;
