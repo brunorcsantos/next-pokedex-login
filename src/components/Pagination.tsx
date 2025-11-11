@@ -9,7 +9,7 @@ const Pagination = (props: any) => {
     <div>
       <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 m-2 rounded-xl sm:px-6 dark:border-white/10">
         <div className="flex w-full items-center justify-between gap-8">
-          <p className="text-sm text-gray-800">
+          <p className="hidden md:block text-sm text-gray-800">
             Mostrando <span className="font-medium">{startIndex + 1}</span> -{" "}
             <span className="font-medium">
               {Math.min(startIndex + itemsPerPage, filteredPokemon.length)}

@@ -9,7 +9,7 @@ export default function HomePage() {
       style={{color: "white"}}
     >
       {/* Conteúdo principal */}
-      <section className="flex flex-col items-center justify-center gap-2 mt-2">
+      <section className="flex flex-col items-center justify-center gap-2 mt-24 md:mt-2">
         <img src="images/slowpoke.png" alt="" className="w-72 object-cover"/>
         <h2 className="text-2xl font-bold drop-shadow-lg">
           Bem-vindo à sua Pokédex!
@@ -21,7 +21,7 @@ export default function HomePage() {
 
         <Link
           href="/pokedex"
-          className="mt-0 px-6 py-3 text-lg font-semibold rounded-full transition-all"
+          className="mt-16 md:mt-0 px-6 py-3 text-lg font-semibold rounded-full transition-all"
           style={{
             backgroundColor: "var(--electric)",
             color: "black",
