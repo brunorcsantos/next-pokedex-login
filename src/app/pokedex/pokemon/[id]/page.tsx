@@ -6,7 +6,7 @@ import ProgressBar from "@/components/ProgressBar";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-export default function PokemonPage({ params }: { params: { id: string } }) {
+export default function PokemonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const [pokemonData, setPokemonData] = useState<any>(null);
   console.log(id);
