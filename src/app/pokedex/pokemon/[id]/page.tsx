@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 export default function PokemonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const [pokemonData, setPokemonData] = useState<any>(null);
-  console.log(id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +46,7 @@ export default function PokemonPage({ params }: { params: Promise<{ id: string }
         <Link href={`/pokedex/pokemon/${Number(id) - 1}`}>
           <button
             className={`cursor-pointer hover:underline ${
-              id == 1 ? "hidden" : ""
+              Number(id) == 1 ? "hidden" : ""
             }`}
           >
             {"<"}Previous
@@ -64,7 +63,7 @@ export default function PokemonPage({ params }: { params: Promise<{ id: string }
         <Link href={`/pokedex/pokemon/${Number(id) + 1}`}>
           <button
             className={`cursor-pointer hover:underline ${
-              id == 1025 ? "hidden" : ""
+              Number(id) == 1025 ? "hidden" : ""
             }`}
           >
             Next{">"}
