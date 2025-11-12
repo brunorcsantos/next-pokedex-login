@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 
@@ -12,6 +12,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = ({ stats }: ProgressBarProps) => {
+  
   const minStat = (base: number, name: string) => {
     if (name === "hp") {
       return Math.floor(((2 * base + 0 + 0) * 100) / 100 + 100 + 10);
@@ -35,14 +36,22 @@ const ProgressBar = ({ stats }: ProgressBarProps) => {
 
   const showStats = (baseStat: number) => {
     const maxBaseStat = 255; // maior valor possível em qualquer stat
+
     const normalizedStat = (baseStat / maxBaseStat) * 100;
     return normalizedStat;
   };
 
-  console.log(stats)
+  console.log(stats);
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-lg">
+      <div className="flex items-center gap-2 w-full">
+        <span className="w-32 text-right font-semibold capitalize text-gray-700 whitespace-nowrap"></span>
+        <div className="flex-1 h-4 bg-transparent rounded-full overflow-hidden"></div>
+        <span className="w-12  text-gray-600">Base</span>
+        <span className="w-14  text-gray-500 text-xs">Min</span>
+        <span className="w-14  text-gray-500 text-xs">Max</span>
+      </div>
       {stats.map((s) => (
         <div key={s.stat.name} className="flex items-center gap-2 w-full">
           <span className="w-32 text-right font-semibold capitalize text-gray-700 whitespace-nowrap">
@@ -64,7 +73,6 @@ const ProgressBar = ({ stats }: ProgressBarProps) => {
           <span className="w-14  text-gray-500 text-xs">
             {maxStat(s.base_stat, s.stat.name)}
           </span>
-            
         </div>
       ))}
     </div>
