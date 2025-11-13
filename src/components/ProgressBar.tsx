@@ -41,7 +41,7 @@ const ProgressBar = ({ stats }: ProgressBarProps) => {
     return normalizedStat;
   };
 
-  console.log(stats);
+  
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-lg">

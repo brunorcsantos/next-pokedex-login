@@ -62,7 +62,7 @@ const Pagination = (props: any) => {
               disabled={currentPage === totalPages}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-40"
             >
-              <ChevronDoubleRightIcon className="size-5" />
+              <ChevronDoubleRightIcon  className="size-5" />
             </button>
           </nav>
         </div>
