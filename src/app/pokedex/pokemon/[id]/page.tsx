@@ -1,4 +1,5 @@
 "use client";
+import Evolutions from "@/components/Evolutions";
 import { Loading } from "@/components/Loading";
 //const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png`;
 
@@ -15,6 +16,12 @@ export default function PokemonPage({
   const [pokemonData, setPokemonData] = useState<any>(null);
   const [pokemonSpecies, setPokemonSpecies] = useState<any>(null);
   const [selectedVersion, setSelectedVersion] = useState<string>("all");
+  const [pokemonEvolution, setPokemonEvolution] = useState<any>(null);
+  const [evolutions, setEvolutions] = useState<{
+    first: string;
+    second: string;
+    third: string;
+  }>({ first: "", second: "", third: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,11 +31,32 @@ export default function PokemonPage({
       );
       const pokemonData = await res.json();
       const specieData = await pokemonSpecie.json();
+      const pokemonEvolution = await fetch(specieData.evolution_chain.url);
+      const evolutionData = pokemonEvolution.json();
+      setPokemonEvolution(await evolutionData);
       setPokemonData(pokemonData);
       setPokemonSpecies(specieData);
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+  if (!pokemonEvolution) return;
+
+  const evolutionsData: any = {};
+
+  evolutionsData.first = pokemonEvolution?.chain.species.name;
+
+  pokemonEvolution.chain.evolves_to.forEach((e: any) => {
+    evolutionsData.second = e?.species.name;
+
+    e?.evolves_to?.forEach((inner: any) => {
+      evolutionsData.third = inner?.species.name;
+    });
+  });
+
+  setEvolutions(evolutionsData);
+}, [pokemonEvolution]);
 
   if (!pokemonData || !pokemonSpecies) {
     return (
@@ -38,6 +66,9 @@ export default function PokemonPage({
     );
   }
 
+  
+
+  
   // if (!pokemonData) {
   //   return (
   //     <div
@@ -57,7 +88,7 @@ export default function PokemonPage({
         .map((e: any) => e.version.name)
     )
   );
-  
+
   const filteredEntries = pokemonSpecies.flavor_text_entries
     .filter((e: any) => e.language.name === "en")
     .filter(
@@ -124,6 +155,10 @@ export default function PokemonPage({
             <ProgressBar stats={pokemonData.stats} />
           </div>
         </div>
+        {/* Evolution */}
+        <div>
+          <Evolutions evolutions={evolutions} />
+        </div>
 
         {/* Entries Table */}
         <div className="w-full overflow-x-auto mb-10">
@@ -163,7 +198,8 @@ export default function PokemonPage({
                     className="py-2 px-4 font-semibold whitespace-nowrap"
                     style={{ color: `var(--${e?.version?.name})` }}
                   >
-                    {e?.version?.name.charAt(0).toUpperCase() + e?.version?.name.slice(1)}
+                    {e?.version?.name.charAt(0).toUpperCase() +
+                      e?.version?.name.slice(1)}
                   </td>
                   <td className="py-2 px-4 align-top">
                     {e?.flavor_text.replace(/\f/g, " ")}
