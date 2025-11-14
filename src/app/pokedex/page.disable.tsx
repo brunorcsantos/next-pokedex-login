@@ -1,6 +1,5 @@
 "use client";
 
-import Card from "@/components/Card.disable";
 import { useEffect, useState } from "react";
 
 const blogPage = () => {
