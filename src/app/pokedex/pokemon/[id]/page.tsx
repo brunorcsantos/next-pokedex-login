@@ -18,45 +18,58 @@ export default function PokemonPage({
   const [selectedVersion, setSelectedVersion] = useState<string>("all");
   const [pokemonEvolution, setPokemonEvolution] = useState<any>(null);
   const [evolutions, setEvolutions] = useState<{
-    first: string;
-    second: string;
-    third: string;
-  }>({ first: "", second: "", third: "" });
+    first: any;
+    second: any;
+    third: any;
+  }>({
+    first: {name: "",trigger: ""},
+    second: null,
+    third: null,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-      const pokemonSpecie = await fetch(
-        `https://pokeapi.co/api/v2/pokemon-species/${id}`
-      );
-      const pokemonData = await res.json();
-      const specieData = await pokemonSpecie.json();
-      const pokemonEvolution = await fetch(specieData.evolution_chain.url);
+      const urls = [
+        id && `https://pokeapi.co/api/v2/pokemon/${id}`,
+        id && `https://pokeapi.co/api/v2/pokemon-species/${id}`,
+      ].filter(Boolean);
+
+      const responses = await Promise.all(urls.map((url) => fetch(url!)));
+      const data = await Promise.all(responses.map((res) => res.json()));
+
+      const pokemonEvolution = await fetch(data[1].evolution_chain.url);
       const evolutionData = pokemonEvolution.json();
+
       setPokemonEvolution(await evolutionData);
-      setPokemonData(pokemonData);
-      setPokemonSpecies(specieData);
+      setPokemonData(data[0]);
+      setPokemonSpecies(data[1]);
     };
     fetchData();
   }, [id]);
 
+
+
   useEffect(() => {
-  if (!pokemonEvolution) return;
+    if (!pokemonEvolution) return;
 
-  const evolutionsData: any = {};
+    const evolutionsData: any = {first: {name: "", trigger: ""}};
 
-  evolutionsData.first = pokemonEvolution?.chain.species.name;
+    evolutionsData.first = pokemonEvolution?.chain.species.name;
+    // pokemonEvolution?.chain.evolves_to.map((e:any) => { 
+    //   evolutionsData.first.trigger = e?.trigger?.name
+    // });
 
-  pokemonEvolution.chain.evolves_to.forEach((e: any) => {
-    evolutionsData.second = e?.species.name;
+    pokemonEvolution.chain.evolves_to.forEach((e: any) => {
+      evolutionsData.second = e?.species.name;
 
-    e?.evolves_to?.forEach((inner: any) => {
-      evolutionsData.third = inner?.species.name;
+      e?.evolves_to?.forEach((inner: any) => {
+        evolutionsData.third = inner?.species.name;
+      });
     });
-  });
+    console.log(evolutionsData)
 
-  setEvolutions(evolutionsData);
-}, [pokemonEvolution]);
+    setEvolutions(evolutionsData);
+  }, [pokemonEvolution]);
 
   if (!pokemonData || !pokemonSpecies) {
     return (
@@ -66,9 +79,6 @@ export default function PokemonPage({
     );
   }
 
-  
-
-  
   // if (!pokemonData) {
   //   return (
   //     <div

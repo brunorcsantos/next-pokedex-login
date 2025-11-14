@@ -3,46 +3,59 @@
 import React, { useEffect, useState } from "react";
 
 interface EvolutionsProps {
-  evolutions: { first: string; second: string; third: string };
+  evolutions: { first?: string; second?: string; third?: string };
 }
 
 const Evolutions = ({ evolutions }: EvolutionsProps) => {
   const [firstEvolution, setFirstEvolution] = useState<any>(null);
   const [secondEvolution, setSecondEvolution] = useState<any>(null);
   const [thirdEvolution, setThirdEvolution] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const urls = [
-        evolutions?.first &&
-          `https://pokeapi.co/api/v2/pokemon/${evolutions.first}`,
-        evolutions?.second &&
-          `https://pokeapi.co/api/v2/pokemon/${evolutions.second}`,
-        evolutions?.third &&
-          `https://pokeapi.co/api/v2/pokemon/${evolutions.third}`,
-      ].filter(Boolean);
+      try {
+        setIsLoading(true);
 
-      const responses = await Promise.all(urls.map((url) => fetch(url!)));
-      const data = await Promise.all(responses.map((res) => res.json()));
+        const evoMap = [evolutions.first, evolutions.second, evolutions.third];
 
-      setFirstEvolution(data[0]);
-      setSecondEvolution(data[1]);
-      setThirdEvolution(data[2]);
+        // URLs garantidas na ordem certa
+        const urls = evoMap.map((name) =>
+          typeof name === "string"
+            ? `https://pokeapi.co/api/v2/pokemon/${name}`
+            : null
+        );
+
+        // Faz fetch apenas das existentes
+        const fetchPromises = urls.map((url) =>
+          url ? fetch(url).then((r) => (r.ok ? r.json() : null)) : null
+        );
+
+        const data = await Promise.all(fetchPromises);
+
+        setFirstEvolution(data[0]);
+        setSecondEvolution(data[1]);
+        setThirdEvolution(data[2]);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar evoluções:", error);
+        setIsLoading(false);
+      }
     };
+
     fetchData();
   }, [evolutions]);
 
-  if (!firstEvolution) return <div>Carregando evoluções...</div>;
-
-  console.log(firstEvolution, secondEvolution, thirdEvolution);
+  if (isLoading) return <div>Carregando evoluções...</div>;
 
   return (
     <div className="flex flex-row items-center justify-center text-center">
       {/* Primeira evolução */}
-      {secondEvolution && (
+      {firstEvolution && (
         <div className="flex flex-col gap-4 m-4">
           <img
-            src={firstEvolution.sprites.other.showdown.front_default}
+            src={firstEvolution.sprites.front_default}
             alt={firstEvolution.name}
           />
           <p className="font-bold">{firstEvolution.name.toUpperCase()}</p>
@@ -50,13 +63,17 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
       )}
 
       {/* Setinha entre 1ª e 2ª */}
-      {secondEvolution && <div>{"->"}</div>}
+      {firstEvolution && secondEvolution && (
+        <div>
+          <Arrow />
+        </div>
+      )}
 
       {/* Segunda evolução */}
       {secondEvolution && (
         <div className="flex flex-col gap-4 m-4">
           <img
-            src={secondEvolution.sprites.other.showdown.front_default}
+            src={secondEvolution.sprites.front_default}
             alt={secondEvolution.name}
           />
           <p className="font-bold">{secondEvolution.name.toUpperCase()}</p>
@@ -64,13 +81,17 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
       )}
 
       {/* Setinha entre 2ª e 3ª */}
-      {thirdEvolution && <div>{"->"}</div>}
+      {secondEvolution && thirdEvolution && (
+        <div>
+          <Arrow />
+        </div>
+      )}
 
       {/* Terceira evolução */}
       {thirdEvolution && (
         <div className="flex flex-col gap-4 m-4">
           <img
-            src={thirdEvolution.sprites.other.showdown.front_default}
+            src={thirdEvolution.sprites.front_default}
             alt={thirdEvolution.name}
           />
           <p className="font-bold">{thirdEvolution.name.toUpperCase()}</p>
@@ -79,5 +100,22 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
     </div>
   );
 };
+
+const Arrow = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="size-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+    />
+  </svg>
+);
 
 export default Evolutions;
