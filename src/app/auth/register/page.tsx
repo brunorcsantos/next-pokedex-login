@@ -21,7 +21,7 @@ export default function LoginPokemon() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // await createUserWithEmailAndPassword(auth, email, password);
 
       toast.success("✔️ Account created successfully!");
 
