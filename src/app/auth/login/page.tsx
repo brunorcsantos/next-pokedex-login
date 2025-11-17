@@ -19,12 +19,12 @@ export default function LoginPokemon() {
       const token = await user.getIdToken();
 
       // Envia o token para backend criar o cookie
-      await fetch("/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-      console.log("Login efetuado com sucesso!")
+      // await fetch("/api/auth/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ token }),
+      // });
+      // console.log("Login efetuado com sucesso!")
       toast.success("Login efetuado com sucesso!");
     } catch (error: any) {
       toast(error.message);

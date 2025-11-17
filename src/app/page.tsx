@@ -27,7 +27,7 @@ export default function HomePage() {
             boxShadow: "0 4px 0 var(--ground)",
           }}
         >
-          Acess Pokédex
+          Access Pokédex
         </Link>
       </section>
 
