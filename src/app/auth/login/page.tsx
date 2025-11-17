@@ -15,8 +15,8 @@ export default function LoginPokemon() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      const token = await user.getIdToken();
+      // const { user } = await signInWithEmailAndPassword(auth, email, password);
+      // const token = await user.getIdToken();
 
       // Envia o token para backend criar o cookie
       // await fetch("/api/auth/login", {
