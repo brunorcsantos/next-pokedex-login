@@ -12,11 +12,10 @@ export default function HomePage() {
       <section className="flex flex-col items-center justify-center gap-2 sm:mt-24 md:mt-2">
         <img src="images/slowpoke.png" alt="" className="w-72 object-cover"/>
         <h2 className="text-2xl font-bold drop-shadow-lg">
-          Bem-vindo à sua Pokédex!
+          Welcome to your Pokédex!
         </h2>
         <p className="text-lg max-w-lg opacity-90">
-          Explore o mundo Pokémon e descubra informações detalhadas sobre
-          centenas de criaturas incríveis.
+          Explore the world of Pokémon and discover detailed information about hundreds of amazing creatures.
         </p>
 
         <Link
@@ -28,13 +27,13 @@ export default function HomePage() {
             boxShadow: "0 4px 0 var(--ground)",
           }}
         >
-          Acessar Pokédex
+          Acess Pokédex
         </Link>
       </section>
 
       {/* Rodapé */}
       <footer className="absolute bottom-0 py-2 text-sm opacity-70">
-        © {new Date().getFullYear()} Pokédex Next — Feito com ❤️ e Tailwind
+        © {new Date().getFullYear()} Pokédex Next — Made with ❤️ and Tailwind
       </footer>
     </main>
   );

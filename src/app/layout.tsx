@@ -8,15 +8,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const hideNavbar = pathname === "/login";
+  
+  
 
   return (
     <html lang="en">
       <body className="antialiased min-h-screen flex flex-col font-sans bg-[#9acce7]">
-        {!hideNavbar && <Navbar />}
+        <Navbar />
         {/* make main exactly viewport minus navbar (navbar = h-14 = 56px) */}
-        <main className="h-[calc(100vh-56px)] overflow-y-auto overflow-x-hidden">{children}</main>
+        <main className="overflow-y-auto overflow-x-hidden">{children}</main>
       </body>
     </html>
   );

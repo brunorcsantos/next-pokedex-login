@@ -1,24 +1,50 @@
 "use client";
 
+import { getEvolutions } from "@/functions/Evolutions";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 interface EvolutionsProps {
-  evolutions: { first?: string; second?: string; third?: string };
+  evolutionChainUrl: any;
 }
 
-const Evolutions = ({ evolutions }: EvolutionsProps) => {
+const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
   const [firstEvolution, setFirstEvolution] = useState<any>(null);
   const [secondEvolution, setSecondEvolution] = useState<any>(null);
   const [thirdEvolution, setThirdEvolution] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  
+  getEvolutions(evolutionChainUrl.url);
+
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
+        const evolutionChain = await fetch(evolutionChainUrl.url);
+        const chainData = await evolutionChain.json();
 
-        const evoMap = [evolutions.first, evolutions.second, evolutions.third];
+        // chainData.chain.evolves_to.forEach((e: any) => {
+        //   if (e.species.name === "persian") {
+        //     console.log(e.species);
+        //   }
+        // });
 
+        const evolutions = await getEvolutions(evolutionChainUrl.url);
+
+        
+        const evoMap = [
+          chainData.chain.species.name,
+          evolutions?.second,
+          evolutions?.third,
+        ];
+
+        if(evolutions?.second === null){
+          setIsLoading(false);
+          return
+        }
+        
         // URLs garantidas na ordem certa
         const urls = evoMap.map((name) =>
           typeof name === "string"
@@ -45,7 +71,7 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
     };
 
     fetchData();
-  }, [evolutions]);
+  }, []);
 
   if (isLoading) return <div>Carregando evoluções...</div>;
 
@@ -53,13 +79,15 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
     <div className="flex flex-row items-center justify-center text-center">
       {/* Primeira evolução */}
       {firstEvolution && (
-        <div className="flex flex-col gap-4 m-4">
-          <img
-            src={firstEvolution.sprites.front_default}
-            alt={firstEvolution.name}
-          />
-          <p className="font-bold">{firstEvolution.name.toUpperCase()}</p>
-        </div>
+        <Link href={`/pokedex/pokemon/${firstEvolution.id}`}>
+          <div className="flex flex-col gap-4 m-4  h-20 w-20 bg-gray-200 rounded-full">
+            <img
+              src={firstEvolution.sprites.front_default}
+              alt={firstEvolution.name}
+            />
+            <p className="font-bold">{firstEvolution.name.toUpperCase()}</p>
+          </div>
+        </Link>
       )}
 
       {/* Setinha entre 1ª e 2ª */}
@@ -71,13 +99,15 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
 
       {/* Segunda evolução */}
       {secondEvolution && (
-        <div className="flex flex-col gap-4 m-4">
-          <img
-            src={secondEvolution.sprites.front_default}
-            alt={secondEvolution.name}
-          />
-          <p className="font-bold">{secondEvolution.name.toUpperCase()}</p>
-        </div>
+        <Link href={`/pokedex/pokemon/${secondEvolution.id}`}>
+          <div className="flex flex-col gap-4 m-4 h-20 w-20 bg-gray-200 rounded-full">
+            <img
+              src={secondEvolution.sprites.front_default}
+              alt={secondEvolution.name}
+            />
+            <p className="font-bold">{secondEvolution.name.toUpperCase()}</p>
+          </div>
+        </Link>
       )}
 
       {/* Setinha entre 2ª e 3ª */}
@@ -89,13 +119,16 @@ const Evolutions = ({ evolutions }: EvolutionsProps) => {
 
       {/* Terceira evolução */}
       {thirdEvolution && (
-        <div className="flex flex-col gap-4 m-4">
-          <img
-            src={thirdEvolution.sprites.front_default}
-            alt={thirdEvolution.name}
-          />
-          <p className="font-bold">{thirdEvolution.name.toUpperCase()}</p>
-        </div>
+        <Link href={`/pokedex/pokemon/${thirdEvolution.id}`}>
+          <div className="flex flex-col gap-4 m-4 h-20 w-20 bg-gray-200 rounded-full whitespace-nowrap">
+            <img
+              src={thirdEvolution.sprites.front_default}
+              alt={thirdEvolution.name}
+              className=""
+            />
+            <p className="font-bold">{thirdEvolution.name.toUpperCase()}</p>
+          </div>
+        </Link>
       )}
     </div>
   );

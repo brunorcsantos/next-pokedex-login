@@ -14,6 +14,7 @@ export default function PokemonPage({
 }) {
   const { id } = React.use(params);
   const [pokemonData, setPokemonData] = useState<any>(null);
+  const [hideTableEntries, setHideTableEntries] = useState<boolean>(false);
   const [pokemonSpecies, setPokemonSpecies] = useState<any>(null);
   const [selectedVersion, setSelectedVersion] = useState<string>("all");
   const [pokemonEvolution, setPokemonEvolution] = useState<any>(null);
@@ -22,7 +23,7 @@ export default function PokemonPage({
     second: any;
     third: any;
   }>({
-    first: {name: "",trigger: ""},
+    first: { name: "", trigger: "" },
     second: null,
     third: null,
   });
@@ -38,24 +39,23 @@ export default function PokemonPage({
       const data = await Promise.all(responses.map((res) => res.json()));
 
       const pokemonEvolution = await fetch(data[1].evolution_chain.url);
-      const evolutionData = pokemonEvolution.json();
+      const evolutionData = await pokemonEvolution.json();
 
       setPokemonEvolution(await evolutionData);
       setPokemonData(data[0]);
       setPokemonSpecies(data[1]);
+      
     };
     fetchData();
   }, [id]);
 
-
-
   useEffect(() => {
     if (!pokemonEvolution) return;
 
-    const evolutionsData: any = {first: {name: "", trigger: ""}};
+    const evolutionsData: any = { first: { name: "", trigger: "" } };
 
     evolutionsData.first = pokemonEvolution?.chain.species.name;
-    // pokemonEvolution?.chain.evolves_to.map((e:any) => { 
+    // pokemonEvolution?.chain.evolves_to.map((e:any) => {
     //   evolutionsData.first.trigger = e?.trigger?.name
     // });
 
@@ -66,7 +66,7 @@ export default function PokemonPage({
         evolutionsData.third = inner?.species.name;
       });
     });
-    console.log(evolutionsData)
+    
 
     setEvolutions(evolutionsData);
   }, [pokemonEvolution]);
@@ -139,11 +139,11 @@ export default function PokemonPage({
       <div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-8 mb-8">
           {/* Images */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center h-60 w-60 bg-gray-200 rounded-full">
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
               alt=""
-              className="bg-gray-200 w-full max-w-xs h-auto object-contain"
+              className="w-full max-w-xs h-auto object-contain"
             />
             <div className="flex gap-2 mt-4 justify-center">
               {pokemonData.types.map((type: any) => (
@@ -166,42 +166,74 @@ export default function PokemonPage({
           </div>
         </div>
         {/* Evolution */}
-        <div>
-          <Evolutions evolutions={evolutions} />
+        <div className="whitespace-nowrap">
+          <Evolutions evolutionChainUrl={pokemonSpecies.evolution_chain}/>
         </div>
 
         {/* Entries Table */}
-        <div className="w-full overflow-x-auto mb-10">
-          <select
-            id="version"
-            value={selectedVersion}
-            onChange={(e) => setSelectedVersion(e.target.value)}
-            className="border border-gray-500 rounded-md px-2 py-1 text-sm my-4 bg-gray-100"
-          >
-            <option value="all">All Versions</option>
-            {versions.map((version: string) => (
-              <option key={version} value={version}>
-                {version}
-              </option>
-            ))}
-          </select>
-          <table className="w-full border-collapse text-left ">
-            <thead>
+        <div
+          className="w-full overflow-x-auto my-16 cursor-pointer"
+          onClick={() => setHideTableEntries(!hideTableEntries)}
+        >
+          <table className="w-full border-collapse text-left">
+            <thead className="">
               <tr className="border-b bg-gray-100">
                 <th className="py-2 px-4">
                   <div className="flex flex-col">
-                    <label
-                      htmlFor="version"
-                      className="text-sm font-semibold mb-1"
+                    <span
+                      className="text-sm font-semibold"
                     >
                       Version
-                    </label>
+                    </span>
                   </div>
                 </th>
-                <th className="py-2 px-4">Pokédex Entries</th>
+
+                {/* SEGUNDA COLUNA - texto + ícone */}
+                <th className="py-2 px-4">
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-semibold">Pokédex Entries</span>
+                    {/* <select
+                      id="version"
+                      value={selectedVersion}
+                      onChange={(e) => setSelectedVersion(e.target.value)}
+                      className="border border-gray-500 rounded-md px-2 py-1 text-sm  bg-gray-100"
+                    >
+                      <option value="all">All Versions</option>
+                      {versions.map((version: string) => (
+                        <option key={version} value={version}>
+                          {version}
+                        </option>
+                      ))}
+                    </select> */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className={`size-6 transition-transform duration-300 cursor-pointer 
+              ${hideTableEntries ? "rotate-0" : "rotate-180"}`}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </div>
+                </th>
               </tr>
             </thead>
-            <tbody>
+
+            <tbody
+              className={`origin-top transition-all duration-500 ease-in-out overflow-hidden
+      ${
+        hideTableEntries
+          ? "max-h-0 opacity-0 scale-y-0 rounded-xl"
+          : "max-h-[2000px] opacity-100 scale-y-100 rounded-md"
+      }
+    `}
+            >
               {filteredEntries.map((e: any, idx: number) => (
                 <tr key={idx} className="hover:bg-gray-50 bg-gray-200">
                   <td
@@ -211,6 +243,7 @@ export default function PokemonPage({
                     {e?.version?.name.charAt(0).toUpperCase() +
                       e?.version?.name.slice(1)}
                   </td>
+
                   <td className="py-2 px-4 align-top">
                     {e?.flavor_text.replace(/\f/g, " ")}
                   </td>
