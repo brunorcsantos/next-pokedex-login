@@ -44,7 +44,6 @@ export default function PokemonPage({
       setPokemonEvolution(await evolutionData);
       setPokemonData(data[0]);
       setPokemonSpecies(data[1]);
-      
     };
     fetchData();
   }, [id]);
@@ -66,7 +65,6 @@ export default function PokemonPage({
         evolutionsData.third = inner?.species.name;
       });
     });
-    
 
     setEvolutions(evolutionsData);
   }, [pokemonEvolution]);
@@ -139,7 +137,7 @@ export default function PokemonPage({
       <div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-8 mb-8">
           {/* Images */}
-          <div className="flex flex-col items-center h-60 w-60 bg-gray-200 rounded-full">
+          <div className="flex flex-col items-center h-80 w-80 bg-gray-200 rounded-full mb-10 sm:mb-0">
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
               alt=""
@@ -166,8 +164,8 @@ export default function PokemonPage({
           </div>
         </div>
         {/* Evolution */}
-        <div className="whitespace-nowrap">
-          <Evolutions evolutionChainUrl={pokemonSpecies.evolution_chain}/>
+        <div className="whitespace-nowrap sm:m-20">
+          <Evolutions evolutionChainUrl={pokemonSpecies.evolution_chain} />
         </div>
 
         {/* Entries Table */}
@@ -175,16 +173,12 @@ export default function PokemonPage({
           className="w-full overflow-x-auto my-16 cursor-pointer"
           onClick={() => setHideTableEntries(!hideTableEntries)}
         >
-          <table className="w-full border-collapse text-left">
+          <table className={`w-full border-collapse text-left`}>
             <thead className="">
               <tr className="border-b bg-gray-100">
                 <th className="py-2 px-4">
                   <div className="flex flex-col">
-                    <span
-                      className="text-sm font-semibold"
-                    >
-                      Version
-                    </span>
+                    <span className="text-sm font-semibold">Version</span>
                   </div>
                 </th>
 
@@ -229,7 +223,7 @@ export default function PokemonPage({
               className={`origin-top transition-all duration-500 ease-in-out overflow-hidden
       ${
         hideTableEntries
-          ? "max-h-0 opacity-0 scale-y-0 rounded-xl"
+          ? "max-h-0 opacity-0 scale-y-0 rounded-xl hidden" 
           : "max-h-[2000px] opacity-100 scale-y-100 rounded-md"
       }
     `}

@@ -9,65 +9,24 @@ export async function getEvolutions(url: string) {
   const chain = data.chain;
 
   const evolutions = {
-    first: chain.species?.name || null,
-    second: null,
-    third: null,
+    first: chain.species?.name || "",
+    second: { name: "", trigger: "" },
+    third: { name: "", trigger: "" },
   };
 
-  // Caso o Pokémon não evolua
-  if (!chain.evolves_to || chain.evolves_to.length === 0) {
-    return evolutions;
-  }
+  // ===== 2ª EVOLUÇÃO =====
+  const secondStage = chain.evolves_to?.[0];
+  if (!secondStage) return evolutions;
 
-  // Segunda evolução (primeiro nível)
-  evolutions.second = chain.evolves_to[0].species?.name || null;
+  evolutions.second.name = secondStage.species.name;
+  evolutions.second.trigger = secondStage.evolution_details?.[0]?.trigger?.name || null;
 
-  if (evolutions.second) {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${evolutions.second}`
-    );
-    const speciesData = await res.json();
+  // ===== 3ª EVOLUÇÃO =====
+  const thirdStage = secondStage.evolves_to?.[0];
+  if (!thirdStage) return evolutions;
 
-    // varieties é um array, então filtrar corretamente:
-    const defaultVariety = speciesData.varieties.find(
-      (v: any) => v.is_default === true
-    );
-    console.log(defaultVariety)
-
-    if (defaultVariety) {
-      // Pega o nome correto da espécie default
-      evolutions.second = defaultVariety.pokemon.name;
-    }
-  }
-
-  // Caso não exista uma segunda evolução no array
-  if (
-    !chain.evolves_to[0].evolves_to ||
-    chain.evolves_to[0].evolves_to.length === 0
-  ) {
-    return evolutions;
-  }
-
-  // Terceira evolução (segundo nível)
-  evolutions.third = chain.evolves_to[0].evolves_to[0].species?.name || null;
-
-  if (evolutions.third) {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${evolutions.third}`
-    );
-    const speciesData = await res.json();
-
-    // varieties é um array, então filtrar corretamente:
-    const defaultVariety = speciesData.varieties.find(
-      (v: any) => v.is_default === true
-    );
-
-    if (defaultVariety) {
-      // Pega o nome correto da espécie default
-      evolutions.third = defaultVariety.pokemon.name;
-    }
-  }
-  console.log(evolutions)
+  evolutions.third.name = thirdStage.species.name;
+  evolutions.third.trigger = thirdStage.evolution_details?.[0]?.trigger?.name || null;
 
   return evolutions;
 }

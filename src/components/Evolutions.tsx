@@ -13,11 +13,8 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
   const [secondEvolution, setSecondEvolution] = useState<any>(null);
   const [thirdEvolution, setThirdEvolution] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  
-  getEvolutions(evolutionChainUrl.url);
-
-  
+  const [secondTrigger, setSecondTrigger] = useState<string>("");
+  const [thirdTrigger, setThirdTrigger] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,19 +29,19 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
         // });
 
         const evolutions = await getEvolutions(evolutionChainUrl.url);
+        console.log(evolutions);
 
-        
         const evoMap = [
           chainData.chain.species.name,
-          evolutions?.second,
-          evolutions?.third,
+          evolutions?.second.name,
+          evolutions?.third.name,
         ];
 
-        if(evolutions?.second === null){
+        if (evolutions?.second.name === null) {
           setIsLoading(false);
-          return
+          return;
         }
-        
+
         // URLs garantidas na ordem certa
         const urls = evoMap.map((name) =>
           typeof name === "string"
@@ -62,6 +59,8 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
         setFirstEvolution(data[0]);
         setSecondEvolution(data[1]);
         setThirdEvolution(data[2]);
+        setSecondTrigger(evolutions.second.trigger);
+        setThirdTrigger(evolutions.third.trigger);
 
         setIsLoading(false);
       } catch (error) {
@@ -78,9 +77,9 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
   return (
     <div className="flex flex-row items-center justify-center text-center">
       {/* Primeira evolução */}
-      {firstEvolution && (
+      {firstEvolution.name && (
         <Link href={`/pokedex/pokemon/${firstEvolution.id}`}>
-          <div className="flex flex-col gap-4 m-4  h-20 w-20 bg-gray-200 rounded-full">
+          <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full">
             <img
               src={firstEvolution.sprites.front_default}
               alt={firstEvolution.name}
@@ -91,16 +90,17 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
       )}
 
       {/* Setinha entre 1ª e 2ª */}
-      {firstEvolution && secondEvolution && (
-        <div>
+      {firstEvolution.name && secondEvolution.name && (
+        <div className="flex flex-col items-center">
+          <span>{secondTrigger}</span>
           <Arrow />
         </div>
       )}
 
       {/* Segunda evolução */}
-      {secondEvolution && (
+      {secondEvolution.name && (
         <Link href={`/pokedex/pokemon/${secondEvolution.id}`}>
-          <div className="flex flex-col gap-4 m-4 h-20 w-20 bg-gray-200 rounded-full">
+          <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full">
             <img
               src={secondEvolution.sprites.front_default}
               alt={secondEvolution.name}
@@ -111,16 +111,17 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
       )}
 
       {/* Setinha entre 2ª e 3ª */}
-      {secondEvolution && thirdEvolution && (
+      {secondEvolution.name && thirdEvolution.name && (
         <div>
+          <span className="flex flex-col items-center">{thirdTrigger}</span>
           <Arrow />
         </div>
       )}
 
       {/* Terceira evolução */}
-      {thirdEvolution && (
+      {thirdEvolution.name && (
         <Link href={`/pokedex/pokemon/${thirdEvolution.id}`}>
-          <div className="flex flex-col gap-4 m-4 h-20 w-20 bg-gray-200 rounded-full whitespace-nowrap">
+          <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full whitespace-nowrap">
             <img
               src={thirdEvolution.sprites.front_default}
               alt={thirdEvolution.name}

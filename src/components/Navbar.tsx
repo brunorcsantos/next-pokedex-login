@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="flex gap-4">
         <Link href="/">Home</Link>
         <Link href="/pokedex">Pokédex</Link>
-        {pathname === "/login" ? (
+        {/* {pathname === "/login" ? (
           <Link
             href="/auth/register"
             className="text-white font-semibold hover:underline"
@@ -34,7 +34,7 @@ export default function Navbar() {
           >
             Login
           </Link>
-        )}
+        )} */}
       </div>
     </nav>
   );
