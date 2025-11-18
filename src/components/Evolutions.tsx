@@ -77,20 +77,20 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
   return (
     <div className="flex flex-row items-center justify-center text-center">
       {/* Primeira evolução */}
-      {firstEvolution.name && (
-        <Link href={`/pokedex/pokemon/${firstEvolution.id}`}>
+      {firstEvolution?.name && (
+        <Link href={`/pokedex/pokemon/${firstEvolution?.id}`}>
           <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full">
             <img
-              src={firstEvolution.sprites.front_default}
-              alt={firstEvolution.name}
+              src={firstEvolution?.sprites.front_default}
+              alt={firstEvolution?.name}
             />
-            <p className="font-bold">{firstEvolution.name.toUpperCase()}</p>
+            <p className="font-bold">{firstEvolution?.name.toUpperCase()}</p>
           </div>
         </Link>
       )}
 
       {/* Setinha entre 1ª e 2ª */}
-      {firstEvolution.name && secondEvolution.name && (
+      {firstEvolution?.name && secondEvolution?.name && (
         <div className="flex flex-col items-center">
           <span>{secondTrigger}</span>
           <Arrow />
@@ -98,20 +98,20 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
       )}
 
       {/* Segunda evolução */}
-      {secondEvolution.name && (
-        <Link href={`/pokedex/pokemon/${secondEvolution.id}`}>
+      {secondEvolution?.name && (
+        <Link href={`/pokedex/pokemon/${secondEvolution?.id}`}>
           <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full">
             <img
-              src={secondEvolution.sprites.front_default}
-              alt={secondEvolution.name}
+              src={secondEvolution?.sprites.front_default}
+              alt={secondEvolution?.name}
             />
-            <p className="font-bold">{secondEvolution.name.toUpperCase()}</p>
+            <p className="font-bold">{secondEvolution?.name.toUpperCase()}</p>
           </div>
         </Link>
       )}
 
       {/* Setinha entre 2ª e 3ª */}
-      {secondEvolution.name && thirdEvolution.name && (
+      {secondEvolution?.name && thirdEvolution?.name && (
         <div>
           <span className="flex flex-col items-center">{thirdTrigger}</span>
           <Arrow />
@@ -119,15 +119,15 @@ const Evolutions = ({ evolutionChainUrl }: EvolutionsProps) => {
       )}
 
       {/* Terceira evolução */}
-      {thirdEvolution.name && (
-        <Link href={`/pokedex/pokemon/${thirdEvolution.id}`}>
+      {thirdEvolution?.name && (
+        <Link href={`/pokedex/pokemon/${thirdEvolution?.id}`}>
           <div className="flex flex-col gap-4 m-4 h-14 w-14 sm:h-28 sm:w-28 bg-gray-200 rounded-full whitespace-nowrap">
             <img
-              src={thirdEvolution.sprites.front_default}
-              alt={thirdEvolution.name}
+              src={thirdEvolution?.sprites.front_default}
+              alt={thirdEvolution?.name}
               className=""
             />
-            <p className="font-bold">{thirdEvolution.name.toUpperCase()}</p>
+            <p className="font-bold">{thirdEvolution?.name.toUpperCase()}</p>
           </div>
         </Link>
       )}
